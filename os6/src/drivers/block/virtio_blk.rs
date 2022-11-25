@@ -19,7 +19,7 @@ use lazy_static::*;
 #[allow(unused)]
 const VIRTIO0: usize = 0x10001000;
 
-pub struct VirtIOBlock(UPSafeCell<VirtIOBlk<'static>>);
+pub struct VirtIOBlock(UPSafeCell<VirtIOBlk<'static>>);//pub struct VirtIOBlock(UPSafeCell<VirtIOBlk<'static>>);
 
 lazy_static! {
     static ref QUEUE_FRAMES: UPSafeCell<Vec<FrameTracker>> = unsafe { 

@@ -15,10 +15,10 @@ use spin::{Mutex, MutexGuard};
 
 /// Virtual filesystem layer over easy-fs
 pub struct Inode {
-    block_id: usize,
-    block_offset: usize,
-    fs: Arc<Mutex<EasyFileSystem>>,
-    block_device: Arc<dyn BlockDevice>,
+    pub block_id: usize,
+    pub block_offset: usize,
+    pub fs: Arc<Mutex<EasyFileSystem>>,
+    pub block_device: Arc<dyn BlockDevice>,
 }
 
 impl Inode {
@@ -37,21 +37,21 @@ impl Inode {
         }
     }
     /// Call a function over a disk inode to read it
-    fn read_disk_inode<V>(&self, f: impl FnOnce(&DiskInode) -> V) -> V {
+    pub fn read_disk_inode<V>(&self, f: impl FnOnce(&DiskInode) -> V) -> V {
         get_block_cache(
             self.block_id,
             Arc::clone(&self.block_device)
         ).lock().read(self.block_offset, f)
     }
     /// Call a function over a disk inode to modify it
-    fn modify_disk_inode<V>(&self, f: impl FnOnce(&mut DiskInode) -> V) -> V {
+    pub fn modify_disk_inode<V>(&self, f: impl FnOnce(&mut DiskInode) -> V) -> V {
         get_block_cache(
             self.block_id,
             Arc::clone(&self.block_device)
         ).lock().modify(self.block_offset, f)
     }
     /// Find inode under a disk inode by name
-    fn find_inode_id(
+    pub fn find_inode_id(
         &self,
         name: &str,
         disk_inode: &DiskInode,
@@ -92,7 +92,7 @@ impl Inode {
         })
     }
     /// Increase the size of a disk inode
-    fn increase_size(
+    pub fn increase_size(
         &self,
         new_size: u32,
         disk_inode: &mut DiskInode,
