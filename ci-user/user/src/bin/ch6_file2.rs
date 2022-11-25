@@ -21,11 +21,13 @@ pub fn main() -> i32 {
     link(fname, lname2);
     fstat(fd, &stat);
     assert_eq!(stat.nlink, 4);
-    write(fd, test_str.as_bytes());
+    let write_len = write(fd, test_str.as_bytes());
+    
     close(fd);
-
+    
     unlink(fname);
     let fd = open(lname0, OpenFlags::RDONLY) as usize;
+    assert!(fd>0);
     let stat2 = Stat::new();
     let mut buf = [0u8; 100];
     let read_len = read(fd, &mut buf) as usize;
